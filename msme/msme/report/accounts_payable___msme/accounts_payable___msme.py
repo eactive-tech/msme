@@ -70,12 +70,27 @@ def execute(filters=None):
         return Invoice_details["columns"], []
 
     # Additional details for suppliers
+    # for x in Invoice_details["result"]:
+    #     if isinstance(x, dict) and x.get("party_type") == "Supplier":
+    #         x["custom_enterprise_type"] = frappe.db.get_value("Supplier", x.get("party"), "custom_enterprise_type") or ""
+    #         x["custom_udyam_registration_date"] = frappe.db.get_value("Supplier", x.get("party"), "custom_udyam_registration_date") or ""
+    #         x["custom_udyam_registration_number"] = frappe.db.get_value("Supplier", x.get("party"), "custom_udyam_registration_number") or ""
+    #         x["custom_business_category"] = frappe.db.get_value("Supplier", x.get("party"), "custom_business_category") or ""
+
+    filtered_result = []
+
     for x in Invoice_details["result"]:
-        if isinstance(x, dict) and x.get("party_type") == "Supplier":
-            x["custom_enterprise_type"] = frappe.db.get_value("Supplier", x.get("party"), "custom_enterprise_type") or ""
-            x["custom_udyam_registration_date"] = frappe.db.get_value("Supplier", x.get("party"), "custom_udyam_registration_date") or ""
-            x["custom_udyam_registration_number"] = frappe.db.get_value("Supplier", x.get("party"), "custom_udyam_registration_number") or ""
-            x["custom_business_category"] = frappe.db.get_value("Supplier", x.get("party"), "custom_business_category") or ""
+        if x.get("party_type") == "Supplier":
+            # Check if the supplier is MSME registered
+            is_msme_registered = frappe.db.get_value("Supplier", x.get("party"), "custom_is_msme_registered")
+
+            if is_msme_registered == 1:
+                x["custom_enterprise_type"] = frappe.db.get_value("Supplier", x.get("party"), "custom_enterprise_type") or ""
+                x["custom_udyam_registration_date"] = frappe.db.get_value("Supplier", x.get("party"), "custom_udyam_registration_date") or ""
+                x["custom_udyam_registration_number"] = frappe.db.get_value("Supplier", x.get("party"), "custom_udyam_registration_number") or ""
+                x["custom_business_category"] = frappe.db.get_value("Supplier", x.get("party"), "custom_business_category") or ""
+                
+                filtered_result.append(x)
 
     # return columns and data
-    return Invoice_details["columns"], Invoice_details["result"]
+    return Invoice_details["columns"], filtered_result
