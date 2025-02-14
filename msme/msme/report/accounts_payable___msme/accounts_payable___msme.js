@@ -1,8 +1,5 @@
-// Copyright (c) 2025, Gautam Tyagi and contributors
-// For license information, please see license.txt
-
 frappe.query_reports["Accounts Payable - MSME"] = {
-	"filters": [
+	filters: [
 		{
 			fieldname: "company",
 			label: __("Company"),
@@ -61,11 +58,32 @@ frappe.query_reports["Accounts Payable - MSME"] = {
 			default: "Due Date",
 		},
 		{
-			fieldname: "range",
-			label: __("Ageing Range"),
-			fieldtype: "Data",
-			// default: "30, 60, 90, 120",
-			default: "15,45",
+			fieldname: "range1",
+			label: __("Ageing Range 1"),
+			fieldtype: "Int",
+			default: "15",
+			reqd: 1,
+		},
+		{
+			fieldname: "range2",
+			label: __("Ageing Range 2"),
+			fieldtype: "Int",
+			default: "45",
+			reqd: 1,
+		},
+		{
+			fieldname: "range3",
+			label: __("Ageing Range 3"),
+			fieldtype: "Int",
+			default: "60",
+			reqd: 1,
+		},
+		{
+			fieldname: "range4",
+			label: __("Ageing Range 4"),
+			fieldtype: "Int",
+			default: "90",
+			reqd: 1,
 		},
 		{
 			fieldname: "payment_terms_template",
@@ -127,13 +145,13 @@ frappe.query_reports["Accounts Payable - MSME"] = {
 			fieldtype: "Check",
 		},
 		{
-			fieldname: "in_party_currency",
-			label: __("In Party Currency"),
+			fieldname: "for_revaluation_journals",
+			label: __("Revaluation Journals"),
 			fieldtype: "Check",
 		},
 		{
-			fieldname: "for_revaluation_journals",
-			label: __("Revaluation Journals"),
+			fieldname: "in_party_currency",
+			label: __("In Party Currency"),
 			fieldtype: "Check",
 		},
 		{
@@ -176,6 +194,4 @@ function get_party_type_options() {
 			});
 		});
 	return options;
-};
-
-
+}
